@@ -9,7 +9,7 @@
 
 ## 単純コマンド
 
-```
+```console
 ~/go/src/github.com/pei0804/shell-tips master*
 ❯ echo HelloWorld
 HelloWorld
@@ -131,7 +131,7 @@ make: *** [err] Error 1
 
 **標準エラー出力もパイプに渡す**
 
-```
+```console
 hoge 2>&1 | less
 ```
 
@@ -139,7 +139,7 @@ hoge 2>&1 | less
 
 **一時的に英語環境でコマンドを動かす**
 
-```
+```console
 LANG=C man ls
 ```
 
@@ -195,7 +195,7 @@ OK
 
 変数を宣言していないものを使った時に終了ステータスを失敗(0以外)にしてくれる
 
-```
+```console
 ~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ cat sample.sh
 #!/bin/bash
