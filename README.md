@@ -10,7 +10,6 @@
 ## 単純コマンド
 
 ```console
-~/go/src/github.com/pei0804/shell-tips master*
 ❯ echo HelloWorld
 HelloWorld
 ```
@@ -29,11 +28,9 @@ HelloWorld
 **標準入力にファイルを入力する例**
 
 ```console
-~/go/src/github.com/pei0804/shell-tips/sample master*
 ❯ cat stdin
 HelloWorld
 
-~/go/src/github.com/pei0804/shell-tips/sample master*
 ❯ < stdin
 HelloWorld
 ```
@@ -41,10 +38,10 @@ HelloWorld
 **標準出力をファイルに書き込む例**
 
 ```console
-~/go/src/github.com/pei0804/shell-tips/sample master*
+❯ cat stdin
+HelloWorld
 ❯ cat stdin > out
 
-~/go/src/github.com/pei0804/shell-tips/sample master*
 ❯ cat out
 HelloWorld
 ```
@@ -52,13 +49,10 @@ HelloWorld
 **標準出力をファイルに追記する例**
 
 ```console
-~/go/src/github.com/pei0804/shell-tips/sample master*
+❯ cat stdin
+HelloWorld
 ❯ cat stdin >> out2
-
-~/go/src/github.com/pei0804/shell-tips/sample master*
 ❯ cat stdin >> out2
-
-~/go/src/github.com/pei0804/shell-tips/sample master*
 ❯ cat out2
 HelloWorld
 HelloWorld
@@ -212,11 +206,9 @@ fi
 ```
 
 ```console
-~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ sh if.sh
 Usage: if.sh file1 file2
 
-~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ sh if.sh ls file1
 eeyan
 ```
@@ -550,7 +542,6 @@ echo "OK"
 ```
 
 ```console
-~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ sh sample5.sh; echo $?
 ls: illegal option -- -
 usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]
@@ -593,7 +584,6 @@ OK
 set -eはパイプラインの一番右のコマンドのエラーは正しくエラーとしてくれるが、途中のコマンドのエラーは無視されます。
 
 ```sh
-~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ cat sample7.sh
 #!/bin/bash
 
@@ -605,7 +595,6 @@ echo "OK"
 ```
 
 ```console
-~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ sh sample7.sh; echo $?
 ls: -: No such file or directory
 ls: l: No such file or directory
