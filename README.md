@@ -74,42 +74,33 @@ HelloWorld
 **標準出力・標準エラーを別ファイルに書き込む**
 
 
-```console
-~/go/src/github.com/pei0804/shell-tips/sample master*
-❯ cat Makefile
+```make
 div:
         echo 1
         2
+```
 
-~/go/src/github.com/pei0804/shell-tips/sample master* 15s
+```console
 ❯ make div 1> log_1 2> log_2
-
-~/go/src/github.com/pei0804/shell-tips/sample master*
 ❯ cat log_1
 echo 1
 1
 2
-
-~/go/src/github.com/pei0804/shell-tips/sample master*
 ❯ cat log_2
 make: 2: No such file or directory
 make: *** [div] Error 1
-
 ```
 
 **標準出力・エラーまとめてファイルに書き込む例**
 
-```console
-~/go/src/github.com/pei0804/shell-tips/sample master*
-❯ cat Makefile
+```make
 err:
         echo HelloWorld
         a
+```
 
-~/go/src/github.com/pei0804/shell-tips/sample master*
+```console
 ❯ make err > log 2>&1
-
-~/go/src/github.com/pei0804/shell-tips/sample master*
 ❯ cat log
 echo HelloWorld
 HelloWorld
@@ -125,7 +116,6 @@ make: *** [err] Error 1
 ### treeの出力をlessに渡す
 
 ```console
-~/go/src/github.com/pei0804/shell-tips/sample master*
 ❯ tree / | less
 ```
 
@@ -146,14 +136,13 @@ LANG=C man ls
 パイプライン1 && パイプライン2はパイプライン1の終了ステータスが成功(0)なら、パイプライン2が実行される。  
 パイプライン1 || パイプライン2はパイプライン1か2のどちらかが成功(0)すればおｋ．
 
-```console
-~/go/src/github.com/pei0804/shell-tips/sample master*
-❯ cat Makefile
+```make
 err:
         echo HelloWorld
         a
+```
 
-~/go/src/github.com/pei0804/shell-tips/sample master*
+```console
 ❯ make err && echo OK
 echo HelloWorld
 HelloWorld
@@ -161,7 +150,6 @@ a
 make: a: No such file or directory
 make: *** [err] Error 1
 
-~/go/src/github.com/pei0804/shell-tips/sample master*
 ❯ make err || echo OK
 echo HelloWorld
 HelloWorld
@@ -212,9 +200,7 @@ export LC_ALL=C
 
 引数によっての分岐
 
-```console
-~/go/src/github.com/pei0804/shell-tips/sh master*
-❯ cat if.sh
+```sh
 #!/bin/bash
 
 if [ $#  -lt 2 ];then # 引数が2個未満
@@ -223,7 +209,9 @@ if [ $#  -lt 2 ];then # 引数が2個未満
 else
   echo "eeyan"
 fi
+```
 
+```console
 ~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ sh if.sh
 Usage: if.sh file1 file2
@@ -231,7 +219,6 @@ Usage: if.sh file1 file2
 ~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ sh if.sh ls file1
 eeyan
-
 ```
 
 ### case
@@ -243,9 +230,7 @@ unameを使ったOS判定の例
 Darwin 15.6.0
 ```
 
-```
-~/go/src/github.com/pei0804/shell-tips/sh master*
-❯ cat case.sh
+```sh
 #!/bin/bash
 
 case `uname -sr` in
@@ -258,8 +243,9 @@ case `uname -sr` in
   *) # 何もひっとしない場合
     echo unknown OS 1&>2;;
 esac
+```
 
-~/go/src/github.com/pei0804/shell-tips/sh master*
+```console
 ❯ sh case.sh
 total 88
 -rw-r--r--  1 jumpei  staff   13  7  5 08:23:24 2018 2
@@ -277,8 +263,201 @@ total 88
 
 ### for
 
-```console
+`*` はカレントディレクトリのファイル名
 
+```sh
+#!/bin/bash
+
+for file in *; do
+  echo $file
+done
+```
+
+```console
+❯ sh for.sh
+LICENSE
+README.md
+for.sh
+for_arg.sh
+for_bash.sh
+for_jot.sh
+for_seq.sh
+sample
+sh
+```
+
+引数 `$@` を使ったループ
+
+```sh
+#!/bin/bash
+
+for arg in "$@";do
+  echo $arg
+done
+
+for arg;do # 上と同じ意味
+  echo $arg
+done
+```
+
+```console
+❯ sh for_arg.sh a b c
+a
+b
+c
+a
+b
+c
+```
+
+bashやzshのプレース展開を使ったループ
+
+```sh
+#!/bin/bash
+
+for i in {1..10};do
+  echo $i
+done
+```
+
+```console
+❯ sh for_bash.sh
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+```
+
+jotを使ったループ
+
+```sh
+#!/bin/bash
+
+for i in `jot 10`;do
+  echo $i
+done
+```
+
+```console
+❯ sh for_jot.sh
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+```
+
+```sh
+for i in `seq 1 10`;do
+  echo $i
+done
+```
+
+```console
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+```
+
+### サブシェル
+
+リストを()で囲むとサブシェルになり、サブシェルはもとのシェルとは別扱いで実行されます。サブシェルの中での変数の変更、umask値を変えても、サブシェルから出ると戻ります。この挙動を利用して、何らか変更をさせて終わったら、元の状態で処理もしたいなどのシチュエーションでは便利です。シェルスクリプトをリダイレクト、パイプでつないでも同じことはできます。
+
+シェル変数 `IFS` を `:` に変更して、`set` コマンドを実行すると `:` が削除され、 `PATH` の中身が `$1 $2 $3` のように位置パラメータに設定されます。これらの変更はサブシェルを抜けると解除されます。
+
+```sh
+#!/bin/sh
+
+echo "IFS=$IFS"
+
+(
+  IFS=:
+  echo "IFS=$IFS"
+  set $PATH
+  echo $3
+)
+
+echo "IFS=$IFS"
+```
+
+```console
+❯ sh sub_shell.sh
+IFS=
+
+IFS=:
+/Users/jumpei/.anyenv/envs/rbenv/shims
+IFS=
+```
+
+### グループコマンド
+
+リストを{}でかこむとグループコマンドと呼ばれる複合コマンドになります。リダイレクトしたり、パイプに接続したり、次のシェル関数の本体として利用できる。グループコマンドはサブシェルと違って、終わった後も影響があります。
+
+コマンドの結果をまとめてlogfileにリダイレクトしている例。
+
+```sh
+#!/bin/sh
+
+{
+  hostname
+  date
+  who
+} > logfile
+```
+
+```console
+❯ sh group.sh
+❯ cat logfile
+jumpei-no-MacBook-Pro-3.local
+2018年 7月 6日 金曜日 08時24分53秒 JST
+jumpei   console  Jul  4 07:49
+jumpei   ttys001  Jul  4 07:49
+```
+
+### シェル関数
+
+シェル関数内の変数は引数渡しのため、位置パラメータ以外はグローバル変数になりますそのため、関数内はローカルにしたい場合は、`{}` ではなく `()`を使って、サブシェルにすれば可能です
+
+```sh
+#!/bin/bash
+
+greet()
+{
+  echo "Hello"
+}
+
+greet
+
+greet2()
+{
+  echo $1 "Hello"
+}
+
+greet2 A
+```
+
+```console
+❯ sh func.sh
+Hello
+A Hello
 ```
 
 ## エラー系TIPS
@@ -286,23 +465,22 @@ total 88
 ### 変数の設定漏れ防止
 
 `set -u`  
-変数を宣言していないものを使った時に終了ステータスを失敗(0以外)にしてくれる  
+変数を宣言していないものを使った時に終了ステータスを失敗(0以外)にしてくれる。  
 
-```console
-~/go/src/github.com/pei0804/shell-tips/sh master*
-❯ cat sample.sh
+```sh
 #!/bin/bash
 
 VAL=foo
 echo $VAL_TYPO
 echo FINISH
+```
 
+```console
 ❯ sh sample.sh; echo $?
 
 FINISH
 0
 
-~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ cat sample2.sh
 #!/bin/bash
 
@@ -321,9 +499,7 @@ sample2.sh: line 6: VAL_TYPO: unbound variable
 
 途中まで処理して落としたい。デフォルト値が使える（${parameter:-word}）
 
-```console
-~/go/src/github.com/pei0804/shell-tips/sh master* 35s
-❯ cat sample3.sh
+```sh
 #!/bin/bash
 
 set -u
@@ -331,9 +507,9 @@ if [ -z "${1:-}" ]; then
     echo "HOW TO hoge" >&2
     exit 2
 fi
+```
 
-
-~/go/src/github.com/pei0804/shell-tips/sh master*
+```console
 ❯ sh sample3.sh
 HOW TO hoge
 ```
@@ -344,16 +520,15 @@ HOW TO hoge
 
 何もつけないとエラーがあっても、最後まで実行される。しかも、ステータスコードも成功になる。
 
-```console
-~/go/src/github.com/pei0804/shell-tips/sh master*
-❯ cat sample4.sh
+```sh
 #!/bin/bash
 
 FOO=$(ls --l)
 echo $FOO
 echo "OK"
+```
 
-~/go/src/github.com/pei0804/shell-tips/sh master*
+```console
 ❯ sh sample4.sh; echo $?
 ls: illegal option -- -
 usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]
@@ -364,9 +539,7 @@ OK
 
 エラー時に途中で終了し、ステータスコードも失敗が帰ってくるようになる
 
-```console
-~/go/src/github.com/pei0804/shell-tips/sh master*
-❯ cat sample5.sh
+```sh
 #!/bin/bash
 
 set -e
@@ -374,7 +547,9 @@ set -e
 FOO=$(ls --l)
 echo $FOO
 echo "OK"
+```
 
+```console
 ~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ sh sample5.sh; echo $?
 ls: illegal option -- -
@@ -387,9 +562,7 @@ grepで検索ヒットしない時にエラーステータスを返すので、�
 以下のような感じにするか、コマンドでエラーとしないオプションとかを使うか  
 またはリストを使ったエラー無視などのパターンがあります。
 
-```console
-~/go/src/github.com/pei0804/shell-tips/sh master*
-❯ cat sample6.sh
+```sh
 #!/bin/bash
 
 set -e
@@ -404,8 +577,9 @@ rm a || true
 rm a || : # trueの代わりに出来る
 
 echo "OK"
+```
 
-~/go/src/github.com/pei0804/shell-tips/sh master*
+```console
 ❯ sh sample6.sh; echo $?
 Nothing sample.sh
 rm: a: No such file or directory
@@ -415,9 +589,10 @@ OK
 ```
 
 ### パイプライン内のエラーで中断する  
+
 set -eはパイプラインの一番右のコマンドのエラーは正しくエラーとしてくれるが、途中のコマンドのエラーは無視されます。
 
-```console
+```sh
 ~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ cat sample7.sh
 #!/bin/bash
@@ -427,7 +602,9 @@ set -e
 FOO=$(ls - l "$0" | wc -l )
 echo $FOO
 echo "OK"
+```
 
+```console
 ~/go/src/github.com/pei0804/shell-tips/sh master*
 ❯ sh sample7.sh; echo $?
 ls: -: No such file or directory
@@ -439,8 +616,7 @@ OK
 
 `set -e -o pipefail`をつけるとパイプライン中のエラーを検知してくれる。
 
-```console
-❯ cat sample8.sh
+```sh
 #!/bin/bash
 
 set -e -o pipefail
@@ -448,8 +624,9 @@ set -e -o pipefail
 FOO=$(ls - l "$0" | wc -l )
 echo $FOO
 echo "OK"
+```
 
-~/go/src/github.com/pei0804/shell-tips/sh master*
+```console
 ❯ sh sample8.sh; echo $?
 ls: -: No such file or directory
 ls: l: No such file or directory
