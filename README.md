@@ -10,7 +10,7 @@
 ## 単純コマンド
 
 ```console
-❯ echo HelloWorld
+$ echo HelloWorld
 HelloWorld
 ```
 
@@ -28,32 +28,32 @@ HelloWorld
 **標準入力にファイルを入力する例**
 
 ```console
-❯ cat stdin
+$ cat stdin
 HelloWorld
 
-❯ < stdin
+$ < stdin
 HelloWorld
 ```
 
 **標準出力をファイルに書き込む例**
 
 ```console
-❯ cat stdin
+$ cat stdin
 HelloWorld
-❯ cat stdin > out
+$ cat stdin > out
 
-❯ cat out
+$ cat out
 HelloWorld
 ```
 
 **標準出力をファイルに追記する例**
 
 ```console
-❯ cat stdin
+$ cat stdin
 HelloWorld
-❯ cat stdin >> out2
-❯ cat stdin >> out2
-❯ cat out2
+$ cat stdin >> out2
+$ cat stdin >> out2
+$ cat out2
 HelloWorld
 HelloWorld
 ```
@@ -75,12 +75,12 @@ div:
 ```
 
 ```console
-❯ make div 1> log_1 2> log_2
-❯ cat log_1
+$ make div 1> log_1 2> log_2
+$ cat log_1
 echo 1
 1
 2
-❯ cat log_2
+$ cat log_2
 make: 2: No such file or directory
 make: *** [div] Error 1
 ```
@@ -94,8 +94,8 @@ err:
 ```
 
 ```console
-❯ make err > log 2>&1
-❯ cat log
+$ make err > log 2>&1
+$ cat log
 echo HelloWorld
 HelloWorld
 a
@@ -110,7 +110,7 @@ make: *** [err] Error 1
 ### treeの出力をlessに渡す
 
 ```console
-❯ tree / | less
+$ tree / | less
 ```
 
 ### 標準エラー出力もパイプに渡す
@@ -137,14 +137,14 @@ err:
 ```
 
 ```console
-❯ make err && echo OK
+$ make err && echo OK
 echo HelloWorld
 HelloWorld
 a
 make: a: No such file or directory
 make: *** [err] Error 1
 
-❯ make err || echo OK
+$ make err || echo OK
 echo HelloWorld
 HelloWorld
 a
@@ -206,10 +206,10 @@ fi
 ```
 
 ```console
-❯ sh if.sh
+$ sh if.sh
 Usage: if.sh file1 file2
 
-❯ sh if.sh ls file1
+$ sh if.sh ls file1
 eeyan
 ```
 
@@ -218,7 +218,7 @@ eeyan
 unameを使ったOS判定の例
 
 ```console
-❯ uname -sr
+$ uname -sr
 Darwin 15.6.0
 ```
 
@@ -238,7 +238,7 @@ esac
 ```
 
 ```console
-❯ sh case.sh
+$ sh case.sh
 total 88
 -rw-r--r--  1 jumpei  staff   13  7  5 08:23:24 2018 2
 -rw-r--r--  1 jumpei  staff  202  7  5 08:24:23 2018 case.sh
@@ -266,7 +266,7 @@ done
 ```
 
 ```console
-❯ sh for.sh
+$ sh for.sh
 LICENSE
 README.md
 for.sh
@@ -293,7 +293,7 @@ done
 ```
 
 ```console
-❯ sh for_arg.sh a b c
+$ sh for_arg.sh a b c
 a
 b
 c
@@ -313,7 +313,7 @@ done
 ```
 
 ```console
-❯ sh for_bash.sh
+$ sh for_bash.sh
 1
 2
 3
@@ -337,7 +337,7 @@ done
 ```
 
 ```console
-❯ sh for_jot.sh
+$ sh for_jot.sh
 1
 2
 3
@@ -391,7 +391,7 @@ echo "IFS=$IFS"
 ```
 
 ```console
-❯ sh sub_shell.sh
+$ sh sub_shell.sh
 IFS=
 
 IFS=:
@@ -416,8 +416,8 @@ IFS=
 ```
 
 ```console
-❯ sh group.sh
-❯ cat logfile
+$ sh group.sh
+$ cat logfile
 jumpei-no-MacBook-Pro-3.local
 2018年 7月 6日 金曜日 08時24分53秒 JST
 jumpei   console  Jul  4 07:49
@@ -447,7 +447,7 @@ greet2 A
 ```
 
 ```console
-❯ sh func.sh
+$ sh func.sh
 Hello
 A Hello
 ```
@@ -468,12 +468,12 @@ echo FINISH
 ```
 
 ```console
-❯ sh sample.sh; echo $?
+$ sh sample.sh; echo $?
 
 FINISH
 0
 
-❯ cat sample2.sh
+$ cat sample2.sh
 #!/bin/bash
 
 set -u
@@ -482,7 +482,7 @@ VAL=foo
 echo $VAL_TYPO
 echo FINISH
 
-❯ sh sample2.sh; echo $?
+$ sh sample2.sh; echo $?
 sample2.sh: line 6: VAL_TYPO: unbound variable
 1
 ```
@@ -502,7 +502,7 @@ fi
 ```
 
 ```console
-❯ sh sample3.sh
+$ sh sample3.sh
 HOW TO hoge
 ```
 
@@ -521,7 +521,7 @@ echo "OK"
 ```
 
 ```console
-❯ sh sample4.sh; echo $?
+$ sh sample4.sh; echo $?
 ls: illegal option -- -
 usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]
 
@@ -542,7 +542,7 @@ echo "OK"
 ```
 
 ```console
-❯ sh sample5.sh; echo $?
+$ sh sample5.sh; echo $?
 ls: illegal option -- -
 usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]
 1
@@ -571,7 +571,7 @@ echo "OK"
 ```
 
 ```console
-❯ sh sample6.sh; echo $?
+$ sh sample6.sh; echo $?
 Nothing sample.sh
 rm: a: No such file or directory
 rm: a: No such file or directory
@@ -584,7 +584,7 @@ OK
 set -eはパイプラインの一番右のコマンドのエラーは正しくエラーとしてくれるが、途中のコマンドのエラーは無視されます。
 
 ```sh
-❯ cat sample7.sh
+$ cat sample7.sh
 #!/bin/bash
 
 set -e
@@ -595,7 +595,7 @@ echo "OK"
 ```
 
 ```console
-❯ sh sample7.sh; echo $?
+$ sh sample7.sh; echo $?
 ls: -: No such file or directory
 ls: l: No such file or directory
 1
@@ -616,7 +616,7 @@ echo "OK"
 ```
 
 ```console
-❯ sh sample8.sh; echo $?
+$ sh sample8.sh; echo $?
 ls: -: No such file or directory
 ls: l: No such file or directory
 1
