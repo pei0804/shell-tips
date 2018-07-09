@@ -58,14 +58,12 @@ HelloWorld
 HelloWorld
 ```
 
-## ファイル記述子のリダイレクト
+**標準出力・標準エラーを別ファイルに書き込む**
 
 ファイル記述子
 
 - 1: 標準出力
 - 2: 標準エラー出力
-
-**標準出力・標準エラーを別ファイルに書き込む**
 
 
 ```make
@@ -107,25 +105,25 @@ make: *** [err] Error 1
 
 構文の組み合わせ  
 
-### treeの出力をlessに渡す
+**treeの出力をlessに渡す**
 
 ```console
 $ tree / | less
 ```
 
-### 標準エラー出力もパイプに渡す
+**標準エラー出力もパイプに渡す**
 
 ```console
 hoge 2>&1 | less
 ```
 
-## 環境変数の一時変更
+**環境変数の一時変更**
 
 ```console
 LANG=C man ls
 ```
 
-## &&(AND) ||(OR)
+**&&(AND) ||(OR)**
 
 パイプライン1 && パイプライン2はパイプライン1の終了ステータスが成功(0)なら、パイプライン2が実行される。  
 パイプライン1 || パイプライン2はパイプライン1か2のどちらかが成功(0)すればおｋ．
@@ -176,13 +174,13 @@ export LC_ALL=C
 
 シェルスクリプトの行頭に記述する `#!` で始まる行shebangという
 
-### bashを絶対パス指定
+**bashを絶対パス指定**
 
 ```sh
 #!/bin/bash
 ```
 
-### bashをenvを使って指定
+**bashをenvを使って指定**
 
 ```sh
 #!/usr/bin/env bash
@@ -622,14 +620,41 @@ ls: l: No such file or directory
 1
 ```
 
+### エラーは標準エラー出力に出力しよう
+
+```sh
+#!/bin/bash
+
+echo 'Expect stdout'
+echo 'Expect stderr' 1>&2
+```
+
+```console
+$ sh ./output.sh >/dev/null
+Expect stderr
+
+$ sh ./output.sh 2>/dev/null
+Expect stdout
+```
+
+### bashに依存しているコマンドは#!/bin/bashと書かない
+
+ubuntu上では以下のスクリプトは動きません。bashに依存しているなら、/bin/bashとしよう。
+
+```
+#!/bin/sh
+list=( ($ls) )
+echo $list
+```
+
 ### 環境変数によって動かないを避ける
 
 ```sh
 export LC_ALL=C
 ```
 
-
 # 参考文献
 
 - ソフトウェアデザイン 2017年 07 月号 シェルのコーナー
 - [bash スクリプトの先頭によく書く記述のおさらい](https://moneyforward.com/engineers_blog/2015/05/21/bash-script-tips/)
+
